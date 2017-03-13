@@ -5,6 +5,14 @@
   "license": "LGPL-3.0+",
   "homepage": "https://github.com/AlexTheBear/sequence-diagrams",
   "bugs": {
-    "url" : "https://github.com/AlexTheBear/sequence-diagrams/issues"
+    "url": "https://github.com/AlexTheBear/sequence-diagrams/issues"
+  },
+  "scripts": {
+    "test": "./node_modules/.bin/jasmine"
+  },
+  "devDependencies": {
+    "jasmine": "^2.5.3",
+    "jison": "^0.4.17",
+    "string-format": "^0.5.0"
   }
 }
