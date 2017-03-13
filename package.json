@@ -1,0 +1,10 @@
+{
+  "name": "sequence-diagrams",
+  "version": "0.0.0",
+  "description": "Project for parsing text based sequence diagrams and rendering them in some form",
+  "license": "LGPL-3.0+",
+  "homepage": "https://github.com/AlexTheBear/sequence-diagrams",
+  "bugs": {
+    "url" : "https://github.com/AlexTheBear/sequence-diagrams/issues"
+  }
+}
