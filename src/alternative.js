@@ -1,11 +1,11 @@
 var format = require('string-format');
 
-var Alternative = function(){
-  this.blocks = [];
+var Alternative = function(blocks){
+  this._blocks = blocks||[];
 };
 
-Alternative.prototype.addBlock = function(block){
-  this.blocks.push(block);
+Alternative.prototype.blocks = function(){
+  return this._blocks;
 }
 
 Alternative.prototype.startTag = function(){
@@ -21,7 +21,17 @@ Alternative.prototype.endTag = function(){
 }
 
 Alternative.prototype.stringify = function(){
-  return format('',this);
+  var ret = [];
+
+  this.blocks().forEach(function(block,indx){
+    var tag = (indx===0 ? this.startTag() : this.elseTag());
+
+    ret.push( format('{0} {1}',tag,block.stringify()) );
+  },this);
+
+  ret.push(format(this.endTag()));
+
+  return ret.join('\r\n');
 }
 
 module.exports = function(){

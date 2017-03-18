@@ -11,7 +11,7 @@
 "autonumber"      return 'AUTO_NUMBER_ON';
 "participant"     return 'PARTICIPANT';
 "as"              return 'AS';
-"opt"             return 'OPT';
+"alt"             return 'ALT';
 "else"            return 'ELSE';
 "end"             return 'END';
 [0-9]+            return 'INTEGER';
@@ -37,7 +37,7 @@
 %%
 
 start
-  : document EOF {return yy.parser.yy;}
+  : document EOF {var sequence=yy.parser.yy.sequence();sequence.statements($document);return sequence;}
   ;
 
 document
@@ -51,35 +51,35 @@ line
   ;
 
 statement
-  : TITLE words {yy.parser.yy.title($words);}
+  : TITLE words {$$=yy.parser.yy.title($words);}
   | participant
   | event
   | autonumber
-  | optional
+  | alternative
   ;
 
 participant
-  : PARTICIPANT words[actor] AS words[alias] {yy.parser.yy.addParticipant($actor,$alias);}
-  | PARTICIPANT words[actor] {yy.parser.yy.addParticipant($actor);}
+  : PARTICIPANT words[actor] AS words[alias] {$$=yy.parser.yy.participant($actor,$alias);}
+  | PARTICIPANT words[actor] {$$=yy.parser.yy.participant($actor);}
   ;
 
 event
-  : actor[left_actor] connection actor[right_actor] SEPARATOR words {yy.parser.yy.addEvent($left_actor,$connection,$right_actor,$words)}
+  : actor[left_actor] connection actor[right_actor] SEPARATOR words {$$=yy.parser.yy.event($left_actor,$connection,$right_actor,$words)}
   ;
 
 autonumber
-  : AUTO_NUMBER_ON INTEGER {yy.parser.yy.autoNumberOn($INTEGER);}
-  | AUTO_NUMBER_OFF {yy.parser.yy.autoNumberOff();}
+  : AUTO_NUMBER_ON INTEGER {$$=yy.parser.yy.autoNumber($INTEGER);}
+  | AUTO_NUMBER_OFF {$$=yy.parser.yy.autoNumber();}
   ;
 
-optional
-  : OPT optional_block {console.log($optional_block);$$='opt-st='+$optional_block.length;}
+alternative
+  : ALT alternative_block {$$=yy.parser.yy.alternative($alternative_block);}
   ;
 
-optional_block
-  : WORDS document optional_block {var hist=$optional_block||[];hist.push($document);$$=hist;}
+alternative_block
+  : WORDS document alternative_block {var hist=$alternative_block||[];hist.unshift(yy.parser.yy.namedBlock($WORDS,$document));$$=hist;}
   | END {$$=undefined;} /* Needed or Jison will default to returning $1 i.e 'END', this would break everything*/
-  | ELSE optional_block {$$=$optional_block;}
+  | ELSE alternative_block {$$=$alternative_block;}
   ;
 
 actor
