@@ -40,3 +40,4 @@ module.exports = function(){
 
   return ret;
 };
+module.exports.prototype=Alternative.prototype;

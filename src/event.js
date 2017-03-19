@@ -8,7 +8,7 @@ var Event = function(left,type,right,message){
 };
 
 Event.prototype.stringify = function(){
-  return format('"{left}"{type}"{right}": "{message}"',this);
+  return format('"{left.shortName}"{type}"{right.shortName}": "{message}"',this);
 }
 
 module.exports = function(){
@@ -17,3 +17,4 @@ module.exports = function(){
 
   return ret;
 };
+module.exports.prototype = Event.prototype;

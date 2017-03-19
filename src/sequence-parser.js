@@ -32,6 +32,12 @@ module.exports = function(){
   parser.generate();
 
   return function(input){
-    return parser.parse(input);
+    var ret = parser.parse(input);
+
+    ret.stringify = function(){
+      return Sequence.stringify(this);
+    }
+
+    return ret;
   }
 };

@@ -21,15 +21,6 @@ describe("Sequence Parser - ",function(){
 
       expect(ret).toBe(output);
     });
-
-    xit("multiple entries should go with the last one", function() {
-      var input = 'title Hello World\r\ntitle Goodbye World';
-      var output = 'title "Goodbye World"';
-
-      var ret = parse(input).stringify();
-
-      expect(ret).toBe(output);
-    });
   });
 
   describe("A Participant with",function(){

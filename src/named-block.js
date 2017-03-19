@@ -1,14 +1,22 @@
 var format = require('string-format');
 
-var NamedBlock = function(name,block){
+var NamedBlock = function(name,statements){
   this.name = name;
-  this.block = block;
+  this.statements(statements);
 };
+
+NamedBlock.prototype.statements = function(statements){
+  if(statements){
+    this._statements = statements;
+  }
+
+  return this._statements;
+}
 
 NamedBlock.prototype.stringify = function(){
   var ret = [format('"{name}"',this)];
-  
-  this.block.forEach(function(statement){
+
+  this.statements().forEach(function(statement){
     ret.push(this.indent(statement.stringify()));
   },this);
 
@@ -32,3 +40,4 @@ module.exports = function(){
 
   return ret;
 };
+module.exports.prototype=NamedBlock.prototype;

@@ -13,3 +13,4 @@ Title.prototype.stringify = function(){
 }
 
 module.exports = function(title){return new Title(title);};
+module.exports.prototype = Title.prototype;

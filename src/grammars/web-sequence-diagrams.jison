@@ -37,7 +37,7 @@
 %%
 
 start
-  : document EOF {var sequence=yy.parser.yy.sequence();sequence.statements($document);return sequence;}
+  : document EOF {return $document;}
   ;
 
 document
@@ -64,7 +64,7 @@ participant
   ;
 
 event
-  : actor[left_actor] connection actor[right_actor] SEPARATOR words {$$=yy.parser.yy.event($left_actor,$connection,$right_actor,$words)}
+  : actor[left_actor] connection actor[right_actor] SEPARATOR words {$$=yy.parser.yy.event(yy.parser.yy.participant($left_actor),$connection,yy.parser.yy.participant($right_actor),$words)}
   ;
 
 autonumber
