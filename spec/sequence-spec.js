@@ -112,7 +112,7 @@ describe("A Sequence",function(){
                       |     |--hi->|
                       AA    BB    AAA
   */
-  it("should deduplicate participants, choosing the last participant statement as the 'truth'",function(){
+  it("should deduplicate participants, choosing the first participant statement as the 'truth'",function(){
     var expected = 'participant "One" as "A"';
 
     var sequence = Sequence([
@@ -177,5 +177,21 @@ describe("A Sequence",function(){
 
     //Note the use of the static Sequence.stringify!
     expect(Sequence.stringify(sequence.participants())).toBe(expected);
+  });
+
+  it("should replace inferred participant objects with explicit ones if they exist",function(){
+    var explicitParticipant = Participant("A");
+    var inferredParticipant = Participant("A");
+
+    var sequence = Sequence([
+      explicitParticipant,
+      Event(inferredParticipant,"->",Participant("B"),"Hello")
+    ]);
+
+    expect(explicitParticipant).not.toBe(inferredParticipant);
+
+    var event = sequence.statements().pop();
+    //Note the use of the static Sequence.stringify!
+    expect(event.left).toBe(explicitParticipant);
   });
 });

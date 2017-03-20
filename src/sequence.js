@@ -17,32 +17,102 @@ Sequence.prototype.init = function(){
 }
 
 Sequence.prototype.deduplicate = function(titlesAndParticipants){
-  var title = titlesAndParticipants.titles.pop();
+  this.deduplicateTitles(titlesAndParticipants.titles);
+  this.deduplicatedParticipants(titlesAndParticipants.participants);
+}
+
+Sequence.prototype.deduplicateTitles = function(titles){
+  var title = titles.pop();
 
   if(title){
     this.title(title);
   }
+}
 
-  var participants = titlesAndParticipants.participants;
-  var deduplicatedParticipants = [];
-  var aliases = [];
+Sequence.prototype.deduplicatedParticipants = function(participants){
+  this.deduplicateParticipantList(participants);
+  this.deduplicatedParticipantsWithinOtherStatements();
+}
 
-  participants.forEach(function(participant){
-    if(participant.inferred()){
-      if(aliases.indexOf(participant.shortName())===-1){
-        deduplicatedParticipants.push(participant);
+Sequence.prototype.deduplicatedParticipantsWithinOtherStatements = function(){
+  var findParticipant = function(find){
+    var found = this.shallowStatementFind(
+      this.participants(),
+      function(statement){return statement.shortName()===find.shortName()}
+    );
+
+    return found.pop();
+  }.bind(this);
+
+  var callback = function(statement,statementsContainer){
+    if(this.isEvent(statement)){
+      var left = statement.left;
+      var right = statement.right;
+
+      statement.left = findParticipant(left);
+      statement.right = findParticipant(right);
+    }
+  }.bind(this);
+
+  this.deepStatementFindAndCallback(callback);
+}
+
+Sequence.prototype.deduplicateParticipantList = function(participants){
+  function formulateParticipantMap(){
+    var aliasesOrder = [];
+    var aliasToParticipant = {};
+
+    participants.forEach(function(participant){
+      var alias = participant.shortName();
+
+      var participants = aliasToParticipant[alias]||[];
+      participants.push(participant);
+
+      aliasToParticipant[alias] = participants;
+
+      if(aliasesOrder.indexOf(alias)===-1){
+        aliasesOrder.push(alias);
       }
-    }
-    else if(!participant.alias()){
-      deduplicatedParticipants.push(participant);
-    }
-    else if(aliases.indexOf(participant.alias())===-1){
-      aliases.push(participant.alias());
-      deduplicatedParticipants.push(participant);
-    }
-  },this);
+    });
 
-  this.participants(deduplicatedParticipants);
+    return {
+      aliasesOrder: aliasesOrder,
+      aliasToParticipant: aliasToParticipant
+    }
+  }
+
+  function reduceParticipantsForAnAlias(participants){
+    var firstExplicit = undefined;
+    var firstInferred = undefined;
+
+    participants.forEach(function(participant){
+      if(participant.inferred()){
+        if(!firstInferred){
+          firstInferred = participant;
+        }
+      }
+      else{
+        if(!firstExplicit){
+          firstExplicit = participant;
+        }
+      }
+    });
+
+    return firstExplicit||firstInferred;
+  }
+
+  function reduceParticipants(map){
+    var reducedParticipants = [];
+
+    map.aliasesOrder.forEach(function(alias){
+      reducedParticipants.push(reduceParticipantsForAnAlias(map.aliasToParticipant[alias]));
+    });
+
+    return reducedParticipants;
+  }
+
+  var map = formulateParticipantMap();
+  this.participants(reduceParticipants(map));
 }
 
 Sequence.prototype.removeTitlesAndParticipants = function(){
