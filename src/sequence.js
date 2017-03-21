@@ -4,6 +4,7 @@ var Event = require('../src/event.js');
 var AutoNumber = require('../src/auto-number.js');
 var Alternative = require('../src/alternative.js');
 var Participant = require('../src/participant.js');
+var Sequence = require('../src/sequence-parser.js');
 
 var Sequence = function(statements){
   this._statements = statements||[];
@@ -240,4 +241,8 @@ module.exports = function(){
 }
 module.exports.stringify = function(statements){
   return Sequence.prototype.stringify.apply({statements: function(){return statements;},title: function(){return undefined;},explicitParticipants: function(){return [];}});
+}
+
+if(typeof window != 'undefined'){
+    window.__sequence = module.exports;
 }

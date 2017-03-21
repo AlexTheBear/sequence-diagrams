@@ -1,0 +1,13 @@
+participant "A Long Name" as A
+
+A->B: Hello
+alt an alt
+else more statements
+participant "Another One" as B
+title My title
+C->G: Message
+else inner alt
+alt an inner
+autonumber 11
+end
+end

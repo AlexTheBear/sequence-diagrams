@@ -194,4 +194,19 @@ describe("A Sequence",function(){
     //Note the use of the static Sequence.stringify!
     expect(event.left).toBe(explicitParticipant);
   });
+
+  /**
+  * Bugs found as a result of E2E testing
+  **/
+  it("should handle an alt block with no contents",function(){
+    var expected = 'alt "one block"\r\nend';
+
+    var sequence = Sequence([
+      Alternative([
+        NamedBlock('one block')
+      ])
+    ]);
+
+    expect(sequence.stringify()).toBe(expected);
+  });
 });

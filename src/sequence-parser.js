@@ -8,11 +8,16 @@ var Event = require("../src/event.js");
 var Participant = require("../src/participant.js");
 var Alternative = require("../src/alternative.js");
 var NamedBlock = require("../src/named-block.js");
+var Grammar = undefined;
 
-var grammar = fs.readFileSync('./src/grammars/web-sequence-diagrams.jison','UTF-8');
+try{
+  Grammar = require('./grammars/web-sequence-diagrams.jison');
+}catch(e){
+  Grammar = fs.readFileSync('./src/grammars/web-sequence-diagrams.jison','UTF-8');
+}
 
 module.exports = function(){
-  var parser = new jison.Parser(grammar);
+  var parser = new jison.Parser(Grammar);
 
   parser.yy = {
     sequence: Sequence,
@@ -29,7 +34,9 @@ module.exports = function(){
       console.log(hash||{});
   };
 
-  parser.generate();
+  var source = parser.generate();
+
+  //fs.writeFileSync('./web-parser.js',source);
 
   return function(input){
     var ret = parser.parse(input);
@@ -41,3 +48,7 @@ module.exports = function(){
     return ret;
   }
 };
+
+if(typeof window != 'undefined'){
+    window.__sequenceParser = module.exports;
+}

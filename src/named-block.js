@@ -2,7 +2,7 @@ var format = require('string-format');
 
 var NamedBlock = function(name,statements){
   this.name = name;
-  this.statements(statements);
+  this.statements(statements||[]);
 };
 
 NamedBlock.prototype.statements = function(statements){

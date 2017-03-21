@@ -1,0 +1,2 @@
+A->B: Hello
+B->C: Also Hello
