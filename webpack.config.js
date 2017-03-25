@@ -1,7 +1,8 @@
 var path = require('path');
+var HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
-  entry: './src/main.js',
+  entry: './src/ui/render.js',
   output: {
     filename: 'bundle.js',
     path: path.resolve(__dirname, 'dist'),
@@ -18,5 +19,11 @@ module.exports = {
   },
   node: {
     fs: "empty"
-  }
+  },
+  externals: {
+    'fabric': 'var fabric'
+  },
+  plugins: [
+    new HtmlWebpackPlugin({template:'./src/ui/index.html'})
+  ]
 };

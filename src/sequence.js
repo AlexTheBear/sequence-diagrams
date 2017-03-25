@@ -242,7 +242,3 @@ module.exports = function(){
 module.exports.stringify = function(statements){
   return Sequence.prototype.stringify.apply({statements: function(){return statements;},title: function(){return undefined;},explicitParticipants: function(){return [];}});
 }
-
-if(typeof window != 'undefined'){
-    window.__sequence = module.exports;
-}

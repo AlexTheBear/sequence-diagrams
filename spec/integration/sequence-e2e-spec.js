@@ -9,9 +9,9 @@ describe("An e2e sequence", function(){
 
     var sequence = Main(input);
 
-    console.log("");
+    /*console.log("");
     console.log(sequence.stringify());
-    console.log("");
+    console.log("");*/
 
     expect(true).toBe(true);
   })
@@ -21,9 +21,9 @@ describe("An e2e sequence", function(){
 
     var sequence = Main(input);
 
-    console.log("");
+    /*console.log("");
     console.log(sequence.stringify());
-    console.log("");
+    console.log("");*/
 
     expect(true).toBe(true);
   })

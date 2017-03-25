@@ -48,7 +48,3 @@ module.exports = function(){
     return ret;
   }
 };
-
-if(typeof window != 'undefined'){
-    window.__sequenceParser = module.exports;
-}

@@ -17,7 +17,3 @@ AutoNumber.prototype.stringify = function(){
 }
 
 module.exports = function(number){return new AutoNumber(number);};
-
-if(typeof window != 'undefined'){
-    window.__autonumber = module.exports;
-}
