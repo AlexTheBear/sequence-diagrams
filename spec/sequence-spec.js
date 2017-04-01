@@ -138,7 +138,7 @@ describe("A Sequence",function(){
     var expected = '"A"->"B": "Hello"';
 
     var sequence = Sequence([
-      Event(Participant("A"),"->",Participant("B"),"Hello")
+      Event(Participant("A"),{arrowRight:Event.ARROW_RIGHT_CLOSED,lineType:Event.LINE_SOLID},Participant("B"),"Hello")
     ])
 
     expect(sequence.stringify()).toBe(expected);

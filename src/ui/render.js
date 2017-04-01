@@ -11,8 +11,28 @@ Render.prototype.init = function(){
   var _this = this;
 
   $('textarea').on('input',function(e){
-    _this.refresh();
+    if(!_this._refresh){
+      _this._refresh = true;
+      setTimeout(function(){_this.refresh()},300);
+      _this._refresh = false;
+    }
   });
+
+  $(window).resize(function(){
+    _this.resizeCanvasToFit();
+  });
+
+  $.ready(function(){_this.resizeCanvasToFit()});
+}
+
+Render.prototype.resizeCanvasToFit = function(){
+  var row = $('.canvas-row');
+  var width = row.width();
+  var height = row.height();
+
+  console.log('RESIZE ON LOAD: wd='+width+' ht='+height);
+
+  this.sequenceRender.canvasSize(width,height);
 }
 
 Render.prototype.refresh = function(){

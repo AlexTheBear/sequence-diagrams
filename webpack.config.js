@@ -14,6 +14,10 @@ module.exports = {
       {
         test: /\.jison$/,
         use: 'raw-loader'
+      },
+      {
+        test: /\.svg$/,
+        use: 'raw-loader'
       }
     ]
   },

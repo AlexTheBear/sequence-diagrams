@@ -93,33 +93,33 @@ words
   ;
 
 connection
-  : left_arrow line_type right_arrow create_actor activate { $$=$left_arrow+$line_type+$right_arrow+$create_actor+$activate }
+  : left_arrow line_type right_arrow create_actor activate { var ret=new Object();ret.arrowLeft=$left_arrow;ret.arrowRight=$right_arrow;ret.lineType=$line_type;ret.createActor=$create_actor;ret.activate=$activate;$$=ret; }
   ;
 
 create_actor
-  : /**none**/ { $$='' }
-  | CREATE_ACTOR_ON_LINE { $$='*' }
+  : /**none**/ { $$=yy.parser.yy.event.NONE }
+  | CREATE_ACTOR_ON_LINE { $$=yy.parser.yy.event.CREATOR }
   ;
 
 activate
-  : /**none**/ { $$='' }
-  | ACTIVATE_ON_LINE { $$='+' }
-  | SOLID_LINE { $$='-' }
+  : /**none**/ { $$=yy.parser.yy.event.NONE }
+  | ACTIVATE_ON_LINE { $$=yy.parser.yy.event.ACTIVATOR }
+  | SOLID_LINE { $$=yy.parser.yy.event.DEACTIVATOR }
   /*| DEACTIVATE_ON_LINE { $$='-' }*/
   ;
 
 left_arrow
-  : /**none**/ { $$='' }
-  | ARROW_LEFT_CLOSED { $$='<' }
-  | ARROW_LEFT_OPEN { $$='<<' }
+  : /**none**/ { $$=yy.parser.yy.event.NONE }
+  | ARROW_LEFT_CLOSED { $$=yy.parser.yy.event.ARROW_LEFT_CLOSED }
+  | ARROW_LEFT_OPEN { $$=yy.parser.yy.event.ARROW_LEFT_OPEN }
   ;
 
 right_arrow
-  : ARROW_RIGHT_CLOSED { $$='>' }
-  | ARROW_RIGHT_OPEN { $$='>>' }
+  : ARROW_RIGHT_CLOSED { $$=yy.parser.yy.event.ARROW_RIGHT_CLOSED }
+  | ARROW_RIGHT_OPEN { $$=yy.parser.yy.event.ARROW_RIGHT_OPEN }
   ;
 
 line_type
-  : SOLID_LINE { $$='-' }
-  | DOTTED_LINE { $$='--' }
+  : SOLID_LINE { $$=yy.parser.yy.event.LINE_SOLID }
+  | DOTTED_LINE { $$=yy.parser.yy.event.LINE_DASHED }
   ;
